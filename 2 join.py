@@ -12,7 +12,7 @@ import pandas as pd
 
 # Reading the files
 courses = pd.read_csv('coursera_courses.csv')
-other = pd.read_csv('result.csv')
+other = pd.read_csv('interim version 1.csv')
 
 # Filtering out projects and non-English courses
 courses = courses.loc[courses['course_type'] != 'GUIDED PROJECT']
@@ -24,4 +24,4 @@ courses.reset_index(drop=True, inplace=True)
 new_df = courses.join(other.set_index('link'), on='link', how='inner')
 
 # Exporting as a csv file
-new_df.to_csv('new.csv', index=False)
+new_df.to_csv('interim version 2.csv', index=False)

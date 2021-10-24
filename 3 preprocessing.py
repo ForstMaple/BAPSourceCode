@@ -17,7 +17,7 @@ import numpy as np
 import pandas as pd
 
 # Reading data
-courses = pd.read_csv('new.csv')
+courses = pd.read_csv('interim version 2')
 
 # Extracting estimated hours to complete the course from 'time_required' column
 courses['hours_to_complete'] = courses['time_required'].apply(lambda x: x[x.find('.') + 2 : x.find('h') - 1])

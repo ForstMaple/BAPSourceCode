@@ -17,7 +17,7 @@ from langdetect import detect
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36'}
 
 # Reading the file
-courses = pd.read_csv('coursera_courses_catalog.csv')
+courses = pd.read_csv('coursera_courses.csv')
 
 # Filtering out projects
 courses = courses.loc[courses['course_type'] != 'GUIDED PROJECT']
@@ -31,15 +31,15 @@ courses = courses[courses['course_language'] == 'English']
 # Resetting thte index
 courses.reset_index(drop=True, inplace=True)
 
-# Gettign the course links
-links = courses['course_link']
+# Getting the course links
+links = courses['link']
 results = []
 
 # Setting the max semaphore to avoid too many sessions at the same time
 sem = asyncio.Semaphore(10)
 
 async def get_info(link):
-    with(await sem):
+    async with sem:
         async with aiohttp.ClientSession() as session:
             async with session.request('GET', link, headers=headers) as resp:
                 text = await resp.text()
@@ -70,7 +70,7 @@ def main():
     loop.close()
     result = [result.result() for result in results[0]]
     result_df = pd.DataFrame(result, columns=['link', 'title', 'provider', 'n_subscribers', 'description'])
-    result_df.to_csv('result.csv')
+    result_df.to_csv('interim version 1.csv')
 
 if __name__ == '__main__':
     main() 
